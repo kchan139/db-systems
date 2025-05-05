@@ -1,6 +1,10 @@
-FROM python:3.13
+FROM python:3.10-slim-buster
 
 WORKDIR /app
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc default-libmysqlclient-dev default-mysql-client netcat-traditional dos2unix pkg-config && \
+    rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
 
