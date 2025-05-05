@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Dashboard</h1>
+<p>Welcome, {{ user.username }}!</p>
+<p>Roles: {{ request.user_roles|join:", " }}</p>
+
+<div class="quick-links">
+    <h3>Quick Links</h3>
+    <ul>
+        {% if 'admin' in request.user_roles %}
+        <li><a href="{% url 'user_management' %}">User Management</a></li>
+        {% endif %}
+        <li><a href="{% url 'logout' %}">Logout</a></li>
+    </ul>
+</div>
+{% endblock %}
