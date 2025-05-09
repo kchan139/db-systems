@@ -1,804 +1,655 @@
--- ============================================================================
--- PATIENTS
--- ============================================================================
--- Assuming patient_id for John Doe becomes 5 (if auto-incrementing)
-INSERT INTO
-    `hospital_patient` (
-        `first_name`,
-        `last_name`,
-        `gender`,
-        `contact_info`,
-        `home_address`,
-        `date_of_birth`,
-        `current_medications`,
-        `emergency_contact`
-    )
-VALUES
-    (
-        'John',
-        'Doe',
-        'M',
-        'john.doe@example.com',
-        '123 Main St, Anytown',
-        '1985-06-15',
-        'Lisinopril 10mg',
-        'Jane Doe - 555-0100'
-    );
-
--- Assuming patient_id for Alice Smith becomes 2 (if auto-incrementing)
-INSERT INTO
-    `hospital_patient` (
-        `first_name`,
-        `last_name`,
-        `gender`,
-        `contact_info`,
-        `home_address`,
-        `date_of_birth`,
-        `current_medications`,
-        `emergency_contact`
-    )
-VALUES
-    (
-        'Alice',
-        'Smith',
-        'F',
-        'alice.smith@example.com',
-        '456 Oak Ave, Anytown',
-        '1990-03-22',
-        'Amoxicillin 250mg',
-        'Bob Smith - 555-0101'
-    );
-
--- ============================================================================
--- EMPLOYEES (Potential Managers & Other Roles)
--- ============================================================================
--- Employee: Dr. Emily Carter (Doctor, Potential Manager for Cardiology)
-INSERT INTO
-    `hospital_employee` (
-        `employee_id`,
-        `name`,
-        `gender`,
-        `date_of_birth`,
-        `job_type`,
-        `experience`,
-        `salary`,
-        `contact_details`,
-        `start_date`,
-        `department_id`
-    )
-VALUES
-    (
-        'doc001',
-        'Dr. Emily Carter',
-        'F',
-        '1975-09-01',
-        'doctor',
-        15,
-        120000.00,
-        'ecarter@hospital.com | 555-0102',
-        '2010-07-15',
-        NULL -- Department will be assigned after Department creation
-    );
-
--- Employee: Dr. Robert Davis (Doctor, Potential Manager for Pediatrics)
-INSERT INTO
-    `hospital_employee` (
-        `employee_id`,
-        `name`,
-        `gender`,
-        `date_of_birth`,
-        `job_type`,
-        `experience`,
-        `salary`,
-        `contact_details`,
-        `start_date`,
-        `department_id`
-    )
-VALUES
-    (
-        'doc002',
-        'Dr. Robert Davis',
-        'M',
-        '1980-04-10',
-        'doctor',
-        12,
-        115000.00,
-        'rdavis@hospital.com | 555-0105',
-        '2012-08-20',
-        NULL -- Department will be assigned after Department creation
-    );
-
--- Employee: Michael Brown (Nurse)
-INSERT INTO
-    `hospital_employee` (
-        `employee_id`,
-        `name`,
-        `gender`,
-        `date_of_birth`,
-        `job_type`,
-        `experience`,
-        `salary`,
-        `contact_details`,
-        `start_date`,
-        `department_id`
-    )
-VALUES
-    (
-        'nurse001',
-        'Michael Brown',
-        'M',
-        '1988-12-10',
-        'nurse',
-        8,
-        75000.00,
-        'mbrown@hospital.com | 555-0103',
-        '2015-03-01',
-        NULL -- Department will be assigned after Department creation
-    );
-
--- Employee: Sarah Lee (Technician)
-INSERT INTO
-    `hospital_employee` (
-        `employee_id`,
-        `name`,
-        `gender`,
-        `date_of_birth`,
-        `job_type`,
-        `experience`,
-        `salary`,
-        `contact_details`,
-        `start_date`,
-        `department_id`
-    )
-VALUES
-    (
-        'tech001',
-        'Sarah Lee',
-        'F',
-        '1992-07-20',
-        'technician',
-        5,
-        60000.00,
-        'slee@hospital.com | 555-0104',
-        '2018-01-10',
-        NULL -- Department will be assigned after Department creation
-    );
-
--- ============================================================================
--- DEPARTMENTS
--- ============================================================================
--- Assuming department_id for Cardiology becomes 1 (if auto-incrementing)
-INSERT INTO
-    `hospital_department` (`name`, `location`, `manager_id`)
-VALUES
-    ('Cardiology', 'Building A, Floor 1', 'doc001');
-
--- Assuming department_id for Pediatrics becomes 2 (if auto-incrementing)
-INSERT INTO
-    `hospital_department` (`name`, `location`, `manager_id`)
-VALUES
-    ('Pediatrics', 'Building B, Floor 2', 'doc002');
-
--- Update employees with their department_id (assuming department_ids are 1 for Cardiology, 2 for Pediatrics)
-UPDATE
-    `hospital_employee`
-SET
-    `department_id` = 2
-WHERE
-    `employee_id` = 'doc001';
-
-UPDATE
-    `hospital_employee`
-SET
-    `department_id` = 3
-WHERE
-    `employee_id` = 'doc002';
-
-UPDATE
-    `hospital_employee`
-SET
-    `department_id` = 2
-WHERE
-    `employee_id` = 'nurse001';
-
-UPDATE
-    `hospital_employee`
-SET
-    `department_id` = 2
-WHERE
-    `employee_id` = 'tech001';
-
--- ============================================================================
--- DOCTOR, NURSE, TECHNICIAN (Specific Role Details)
--- ============================================================================
-INSERT INTO
-    `hospital_doctor` (`employee_id`, `specialty`, `certificate`)
-VALUES
-    (
-        'doc001',
-        'Interventional Cardiology',
-        'Board Certified in Cardiology, Cert# XYZ123'
-    );
-
-INSERT INTO
-    `hospital_doctor` (`employee_id`, `specialty`, `certificate`)
-VALUES
-    (
-        'doc002',
-        'General Pediatrics',
-        'Board Certified in Pediatrics, Cert# ABC789'
-    );
-
-INSERT INTO
-    `hospital_nurse` (`employee_id`, `specialty`)
-VALUES
-    ('nurse001', 'Cardiac Care Nursing');
-
-INSERT INTO
-    `hospital_technician` (`employee_id`, `specialty`, `responsibility`)
-VALUES
-    (
-        'tech001',
-        'Radiology Technician',
-        'Operates X-Ray and CT scan equipment.'
-    );
-
--- ============================================================================
--- ROOMS
--- ============================================================================
--- Cardiology, room_number becomes 2
-INSERT INTO
-    `hospital_room` (
-        `department_id`,
-        `room_type`,
-        `room_name`,
-        `status`
-    )
-VALUES
-    (2, 'Standard Ward', 'CW-101', 'Available');
-
--- Pediatrics, room_number becomes 3
-INSERT INTO
-    `hospital_room` (
-        `department_id`,
-        `room_type`,
-        `room_name`,
-        `status`
-    )
-VALUES
-    (3, 'Pediatric ICU', 'PICU-01', 'Occupied');
-
--- ============================================================================
--- BEDS
--- ============================================================================
-INSERT INTO
-    `hospital_bed` (`room_id`, `bed_number`, `status`)
-VALUES
-    (2, 'A', 'Available');
-
-INSERT INTO
-    `hospital_bed` (`room_id`, `bed_number`, `status`)
-VALUES
-    (2, 'B', 'Maintenance');
-
-INSERT INTO
-    `hospital_bed` (`room_id`, `bed_number`, `status`)
-VALUES
-    (3, 'P1', 'Occupied');
-
--- ============================================================================
--- EQUIPMENT
--- ============================================================================
-INSERT INTO
-    `hospital_equipment` (`name`, `type`, `status`, `technician_id`)
-VALUES
-    (
-        'ECG Machine Model X',
-        'Diagnostic',
-        'Operational',
-        'tech001'
-    );
-
-INSERT INTO
-    `hospital_equipment` (`name`, `type`, `status`, `technician_id`)
-VALUES
-    (
-        'Portable X-Ray Unit',
-        'Imaging',
-        'Under Maintenance',
-        'tech001'
-    );
-
--- ============================================================================
--- SURGERIES
--- ============================================================================
--- surgery_id becomes 1
-INSERT INTO
-    `hospital_surgery` (`type`, `date`, `outcome`, `complications`)
-VALUES
-    (
-        'Coronary Artery Bypass Grafting',
-        '2025-05-10',
-        'Successful',
-        'Minor post-operative infection.'
-    );
-
--- surgery_id becomes 2
-INSERT INTO
-    `hospital_surgery` (`type`, `date`, `outcome`, `complications`)
-VALUES
-    ('Appendectomy', '2025-05-12', 'Pending', '');
-
--- ============================================================================
--- SURGERY ASSIGNMENTS
--- ============================================================================
--- CABG for John Doe by Dr. Carter
-INSERT INTO
-    `hospital_surgeryassignment` (`surgery_id`, `doctor_id`, `patient_id`)
-VALUES
-    (1, 'doc001', 1);
-
--- Appendectomy for Alice Smith by Dr. Davis
-INSERT INTO
-    `hospital_surgeryassignment` (`surgery_id`, `doctor_id`, `patient_id`)
-VALUES
-    (2, 'doc002', 2);
-
--- ============================================================================
--- DIAGNOSTIC TESTS
--- ============================================================================
--- test_id becomes 1
-INSERT INTO
-    `hospital_diagnostictest` (`test_name`, `description`, `date`, `results`)
-VALUES
-    (
-        'Full Blood Count',
-        'Routine blood panel for John Doe',
-        '2025-05-08',
-        'Results pending.'
-    );
-
--- test_id becomes 2
-INSERT INTO
-    `hospital_diagnostictest` (`test_name`, `description`, `date`, `results`)
-VALUES
-    (
-        'Chest X-Ray',
-        'Pre-operative check for Alice Smith',
-        '2025-05-09',
-        'Clear.'
-    );
-
--- ============================================================================
--- TEST ASSIGNMENTS
--- ============================================================================
--- Blood Count for John Doe by Michael Brown
-INSERT INTO
-    `hospital_testassignment` (`test_id`, `nurse_id`, `patient_id`)
-VALUES
-    (2, 'nurse001', 5);
-
--- Chest X-Ray for Alice Smith by Michael Brown
-INSERT INTO
-    `hospital_testassignment` (`test_id`, `nurse_id`, `patient_id`)
-VALUES
-    (3, 'nurse001', 6);
-
--- ============================================================================
--- INSURANCE
--- ============================================================================
--- John Doe, insurance_id becomes 1
-INSERT INTO
-    `hospital_insurance` (
-        `policy_number`,
-        `priority`,
-        `provider`,
-        `status`,
-        `coverage_percentage`,
-        `coverage_limit`,
-        `patient_id`
-    )
-VALUES
-    (
-        'POL98765JD',
-        1,
-        'MediCare Plus',
-        'Active',
-        80.00,
-        50000.00,
-        5
-    );
-
--- Alice Smith, insurance_id becomes 2
-INSERT INTO
-    `hospital_insurance` (
-        `policy_number`,
-        `priority`,
-        `provider`,
-        `status`,
-        `coverage_percentage`,
-        `coverage_limit`,
-        `patient_id`
-    )
-VALUES
-    (
-        'POL12345AS',
-        1,
-        'HealthGuard Basic',
-        'Active',
-        70.00,
-        25000.00,
-        2
-    );
-
--- ============================================================================
--- BILLING
--- ============================================================================
--- John Doe, billing_id becomes 1
-INSERT INTO
-    `hospital_billing` (
-        `date_issued`,
-        `initial_amount`,
-        `cover_amount`,
-        `final_amount`,
-        `due_date`,
-        `status`,
-        `patient_id`
-    )
-VALUES
-    (
-        '2025-05-15',
-        15000.00,
-        12000.00,
-        3000.00,
-        '2025-06-15',
-        'Partially Paid',
-        5
-    );
-
--- Alice Smith, billing_id becomes 2
-INSERT INTO
-    `hospital_billing` (
-        `date_issued`,
-        `initial_amount`,
-        `cover_amount`,
-        `final_amount`,
-        `due_date`,
-        `status`,
-        `patient_id`
-    )
-VALUES
-    (
-        '2025-05-14',
-        3000.00,
-        2100.00,
-        900.00,
-        '2025-06-14',
-        'Issued',
-        6
-    );
-
--- ============================================================================
--- INSURANCE BILLING (Junction Table)
--- ============================================================================
-INSERT INTO
-    `hospital_insurancebilling` (`insurance_id`, `billing_id`)
-VALUES
-    (1, 1);
-
-INSERT INTO
-    `hospital_insurancebilling` (`insurance_id`, `billing_id`)
-VALUES
-    (2, 2);
-
--- ============================================================================
--- PAYMENTS
--- ============================================================================
-INSERT INTO
-    `hospital_payment` (
-        `payment_date`,
-        `method`,
-        `amount_paid`,
-        `receipt_number`,
-        `notes`,
-        `billing_id`
-    )
-VALUES
-    (
-        '2025-05-20',
-        'Credit Card',
-        3000.00,
-        'RCPT001JD',
-        'Co-payment for surgery.',
-        1
-    );
-
-INSERT INTO
-    `hospital_payment` (
-        `payment_date`,
-        `method`,
-        `amount_paid`,
-        `receipt_number`,
-        `notes`,
-        `billing_id`
-    )
-VALUES
-    (
-        '2025-05-18',
-        'Insurance Direct',
-        2100.00,
-        'RCPT002AS_INS',
-        'Payment from HealthGuard Basic.',
-        2
-    );
-
--- ============================================================================
--- ALLERGIES
--- ============================================================================
-INSERT INTO
-    `hospital_allergy` (`patient_id`, `allergy`)
-VALUES
-    (5, 'Penicillin');
-
-INSERT INTO
-    `hospital_allergy` (`patient_id`, `allergy`)
-VALUES
-    (5, 'Dust Mites');
-
-INSERT INTO
-    `hospital_allergy` (`patient_id`, `allergy`)
-VALUES
-    (6, 'Peanuts');
-
--- ============================================================================
--- MEDICAL HISTORY
--- ============================================================================
-INSERT INTO
-    `hospital_medicalhistory` (
-        `patient_id`,
-        `type`,
-        `description`,
-        `treatment`,
-        `stage`
-    )
-VALUES
-    (
-        5,
-        'Hypertension',
-        'Diagnosed in 2020.',
-        'Lisinopril 10mg daily.',
-        'Chronic - Stable'
-    );
-
-INSERT INTO
-    `hospital_medicalhistory` (
-        `patient_id`,
-        `type`,
-        `description`,
-        `treatment`,
-        `stage`
-    )
-VALUES
-    (
-        6,
-        'Asthma',
-        'Childhood asthma.',
-        'Albuterol inhaler PRN.',
-        'Intermittent'
-    );
-
--- ============================================================================
--- DELETE AND SELECT QUERIES
--- ============================================================================
--- Example: Delete 'Dust Mites' allergy for Patient ID 5 (John Doe)
--- Assume 'Dust Mites' allergy for patient_id 5 has a primary key `id` = 2 in `hospital_allergy`.
--- 1. ORM loads the patient data (e.g., when on the patient's edit page).
-SELECT
-    `hospital_patient`.`patient_id`,
-    `hospital_patient`.`first_name`,
-    `hospital_patient`.`last_name`,
-    `hospital_patient`.`gender`,
-    `hospital_patient`.`contact_info`,
-    `hospital_patient`.`home_address`,
-    `hospital_patient`.`date_of_birth`,
-    `hospital_patient`.`current_medications`,
-    `hospital_patient`.`emergency_contact`
-FROM
-    `hospital_patient`
-WHERE
-    `hospital_patient`.`patient_id` = 5
-LIMIT
-    21;
-
--- 2. ORM finds the allergy data (e.g., when on the patient's edit page).
-SELECT
-    `hospital_allergy`.`id`,
-    `hospital_allergy`.`patient_id`,
-    `hospital_allergy`.`allergy`
-FROM
-    `hospital_allergy`
-WHERE
-    `hospital_allergy`.`id` = 12
-LIMIT
-    21;
-
--- 3. ORM deletes allergy data with id = 12
-DELETE FROM
-    `hospital_allergy`
-WHERE
-    `hospital_allergy`.`id` IN (12);
-
--- 1. ORM find all data relating to the patient
--- The patient
-SELECT
-    *
-FROM
-    `hospital_patient`
-WHERE
-    `hospital_patient`.`patient_id` = 5;
-
--- The patient's surgery assignment
-SELECT
-    *
-FROM
-    `hospital_surgeryassignment`
-    INNER JOIN `hospital_patient` ON (
-        `hospital_surgeryassignment`.`patient_id` = `hospital_patient`.`patient_id`
-    )
-WHERE
-    `hospital_surgeryassignment`.`patient_id` IN (5);
-
--- The patient's test assignment
-SELECT
-    *
-FROM
-    `hospital_testassignment`
-    INNER JOIN `hospital_patient` ON (
-        `hospital_testassignment`.`patient_id` = `hospital_patient`.`patient_id`
-    )
-WHERE
-    `hospital_testassignment`.`patient_id` IN (5);
-
--- The patient's insurance
-SELECT
-    *
-FROM
-    `hospital_insurance`
-    INNER JOIN `hospital_patient` ON (
-        `hospital_insurance`.`patient_id` = `hospital_patient`.`patient_id`
-    )
-WHERE
-    `hospital_insurance`.`patient_id` IN (5);
-
--- The patient's insurance billing
-SELECT
-    *
-FROM
-    `hospital_insurancebilling`
-    INNER JOIN `hospital_insurance` ON (
-        `hospital_insurancebilling`.`insurance_id` = `hospital_insurance`.`insurance_id`
-    )
-WHERE
-    `hospital_insurancebilling`.`insurance_id` IN (1);
-
--- The patient's billing
-SELECT
-    *
-FROM
-    `hospital_billing`
-    INNER JOIN `hospital_patient` ON (
-        `hospital_billing`.`patient_id` = `hospital_patient`.`patient_id`
-    )
-WHERE
-    `hospital_billing`.`patient_id` IN (5);
-
--- The patient's insurance billing
-SELECT
-    *
-FROM
-    `hospital_insurancebilling`
-    INNER JOIN `hospital_billing` ON (
-        `hospital_insurancebilling`.`billing_id` = `hospital_billing`.`billing_id`
-    )
-WHERE
-    `hospital_insurancebilling`.`billing_id` IN (1);
-
--- The billing's payment
-SELECT
-    *
-FROM
-    `hospital_payment`
-    INNER JOIN `hospital_billing` ON (
-        `hospital_payment`.`billing_id` = `hospital_billing`.`billing_id`
-    )
-WHERE
-    `hospital_payment`.`billing_id` IN (1);
-
--- The patient's allergy
-SELECT
-    *
-FROM
-    `hospital_allergy`
-    INNER JOIN `hospital_patient` ON (
-        `hospital_allergy`.`patient_id` = `hospital_patient`.`patient_id`
-    )
-WHERE
-    `hospital_allergy`.`patient_id` IN (5);
-
--- The patient's medical history
-SELECT
-    *
-FROM
-    `hospital_medicalhistory`
-    INNER JOIN `hospital_patient` ON (
-        `hospital_medicalhistory`.`patient_id` = `hospital_patient`.`patient_id`
-    )
-WHERE
-    `hospital_medicalhistory`.`patient_id` IN (5);
-
--- Billing id for deleting junction table 
-SELECT
-    `hospital_billing`.`billing_id`
-FROM
-    `hospital_billing`
-WHERE
-    `hospital_billing`.`patient_id` IN (5);
-
--- Insurance id for deleting junction table
-SELECT
-    `hospital_insurance`.`insurance_id`
-FROM
-    `hospital_insurance`
-WHERE
-    `hospital_insurance`.`patient_id` IN (5);
-
--- 2. ORM delete all patient data
-DELETE FROM
-    `hospital_insurancebilling`
-WHERE
-    `hospital_insurancebilling`.`insurance_id` IN (1);
-
-DELETE FROM
-    `hospital_insurancebilling`
-WHERE
-    `hospital_insurancebilling`.`billing_id` IN (1);
-
-DELETE FROM
-    `hospital_payment`
-WHERE
-    `hospital_payment`.`billing_id` IN (1);
-
-DELETE FROM
-    `hospital_surgeryassignment`
-WHERE
-    `hospital_surgeryassignment`.`patient_id` IN (5);
-
-DELETE FROM
-    `hospital_testassignment`
-WHERE
-    `hospital_testassignment`.`patient_id` IN (5);
-
-DELETE FROM
-    `hospital_allergy`
-WHERE
-    `hospital_allergy`.`patient_id` IN (5);
-
-DELETE FROM
-    `hospital_medicalhistory`
-WHERE
-    `hospital_medicalhistory`.`patient_id` IN (5);
-
-DELETE FROM
-    `hospital_insurance`
-WHERE
-    `hospital_insurance`.`insurance_id` IN (1);
-
-DELETE FROM
-    `hospital_billing`
-WHERE
-    `hospital_billing`.`billing_id` IN (1);
-
-DELETE FROM
-    `hospital_patient`
-WHERE
-    `hospital_patient`.`patient_id` IN (5);
+USE HospitalManagementSystem;
+
+-- -----------------------------------------------------
+-- Roles Definition and Grants
+-- -----------------------------------------------------
+
+-- Drop roles if they exist
+DROP ROLE IF EXISTS 'Admin_Role', 'Doctor_Role', 'Nurse_Role', 'Patient_Role', 'Technician_Role';
+
+-- Create Roles
+CREATE ROLE 'Admin_Role';
+CREATE ROLE 'Doctor_Role';
+CREATE ROLE 'Nurse_Role';
+CREATE ROLE 'Patient_Role';
+CREATE ROLE 'Technician_Role';
+
+-- Grant Privileges to Admin_Role
+GRANT ALL PRIVILEGES ON HospitalManagementSystem.* TO 'Admin_Role'; -- For simplicity, admin gets full control.
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AddPatient TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdatePatientDemographics TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdatePatientContact TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdatePatientMedications TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.DeletePatient TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AddMedicalHistory TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdateMedicalHistory TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AddAllergy TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.DeleteAllergy TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AddInsurance TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdateInsurance TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.DeleteInsurance TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AddDoctor TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdateDoctor TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.DeleteDoctor TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AddNurse TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdateNurse TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.DeleteNurse TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AddTechnician TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdateTechnician TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.DeleteTechnician TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AssignDoctorToPatient TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.RemoveDoctorFromPatient TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AssignNurseToPatient TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.RemoveNurseFromPatient TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.GenerateBill TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.LinkInsuranceToBillAndRecalculate TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.OrderDiagnosticTest TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.RecordTestResults TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AssignEquipmentToTest TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.ScheduleSurgery TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdateSurgeryOutcome TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AssignEquipmentToSurgery TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.LogEquipmentMaintenance TO 'Admin_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdateEquipmentStatus TO 'Admin_Role';
+
+
+-- Grant Privileges to Doctor_Role
+GRANT SELECT ON HospitalManagementSystem.PATIENT TO 'Doctor_Role';
+GRANT SELECT, INSERT, UPDATE ON HospitalManagementSystem.MEDICAL_HISTORY TO 'Doctor_Role';
+GRANT SELECT, INSERT, DELETE ON HospitalManagementSystem.ALLERGIES TO 'Doctor_Role';
+GRANT SELECT ON HospitalManagementSystem.INSURANCE TO 'Doctor_Role';
+GRANT SELECT, INSERT, DELETE ON HospitalManagementSystem.ASSIGN_DOC TO 'Doctor_Role';
+GRANT SELECT, INSERT, UPDATE, DELETE ON HospitalManagementSystem.DIAGNOSTIC_TEST TO 'Doctor_Role';
+GRANT SELECT, INSERT, UPDATE, DELETE ON HospitalManagementSystem.SURGERY TO 'Doctor_Role';
+GRANT SELECT, INSERT, DELETE ON HospitalManagementSystem.PERFORM_SURGERY TO 'Doctor_Role';
+GRANT SELECT, INSERT, DELETE ON HospitalManagementSystem.USE_IN_SURGERY TO 'Doctor_Role';
+GRANT SELECT, INSERT, DELETE ON HospitalManagementSystem.PERFORM_TEST TO 'Doctor_Role'; -- Doctors might order tests performed by nurses
+GRANT SELECT, INSERT, DELETE ON HospitalManagementSystem.USE_IN_TEST TO 'Doctor_Role';
+GRANT SELECT ON HospitalManagementSystem.DOCTOR TO 'Doctor_Role';
+GRANT SELECT ON HospitalManagementSystem.NURSE TO 'Doctor_Role';
+GRANT SELECT ON HospitalManagementSystem.TECHNICIAN TO 'Doctor_Role';
+GRANT SELECT ON HospitalManagementSystem.EQUIPMENT TO 'Doctor_Role';
+GRANT SELECT ON HospitalManagementSystem.EMPLOYEE TO 'Doctor_Role'; -- To see general employee details
+
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AddMedicalHistory TO 'Doctor_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdateMedicalHistory TO 'Doctor_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AddAllergy TO 'Doctor_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.DeleteAllergy TO 'Doctor_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AssignDoctorToPatient TO 'Doctor_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.RemoveDoctorFromPatient TO 'Doctor_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.OrderDiagnosticTest TO 'Doctor_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.RecordTestResults TO 'Doctor_Role'; -- If doctors can also record results
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AssignEquipmentToTest TO 'Doctor_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.ScheduleSurgery TO 'Doctor_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdateSurgeryOutcome TO 'Doctor_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AssignEquipmentToSurgery TO 'Doctor_Role';
+
+-- Grant Privileges to Nurse_Role
+GRANT SELECT, UPDATE (CurrentMeds, ContactInfo, Address_Street, Address_District, Address_City) ON HospitalManagementSystem.PATIENT TO 'Nurse_Role';
+GRANT SELECT ON HospitalManagementSystem.MEDICAL_HISTORY TO 'Nurse_Role';
+GRANT SELECT ON HospitalManagementSystem.ALLERGIES TO 'Nurse_Role';
+GRANT SELECT, INSERT, DELETE ON HospitalManagementSystem.ASSIGN_NURSE TO 'Nurse_Role';
+GRANT SELECT, UPDATE (Results, Date) ON HospitalManagementSystem.DIAGNOSTIC_TEST TO 'Nurse_Role'; -- Nurses primarily record results
+GRANT SELECT, INSERT, DELETE ON HospitalManagementSystem.PERFORM_TEST TO 'Nurse_Role';
+GRANT SELECT, INSERT, DELETE ON HospitalManagementSystem.USE_IN_TEST TO 'Nurse_Role';
+GRANT SELECT ON HospitalManagementSystem.NURSE TO 'Nurse_Role';
+GRANT SELECT ON HospitalManagementSystem.DOCTOR TO 'Nurse_Role';
+GRANT SELECT ON HospitalManagementSystem.EQUIPMENT TO 'Nurse_Role';
+GRANT SELECT ON HospitalManagementSystem.EMPLOYEE TO 'Nurse_Role';
+
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdatePatientContact TO 'Nurse_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdatePatientMedications TO 'Nurse_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AssignNurseToPatient TO 'Nurse_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.RemoveNurseFromPatient TO 'Nurse_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.RecordTestResults TO 'Nurse_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.AssignEquipmentToTest TO 'Nurse_Role'; -- If nurses can assign equipment for tests they perform
+
+-- Grant Privileges to Technician_Role
+GRANT SELECT, UPDATE (Status) ON HospitalManagementSystem.EQUIPMENT TO 'Technician_Role';
+GRANT SELECT, INSERT, UPDATE, DELETE ON HospitalManagementSystem.MAINTAINS TO 'Technician_Role';
+GRANT SELECT ON HospitalManagementSystem.TECHNICIAN TO 'Technician_Role';
+GRANT SELECT ON HospitalManagementSystem.EMPLOYEE TO 'Technician_Role';
+
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.LogEquipmentMaintenance TO 'Technician_Role';
+GRANT EXECUTE ON PROCEDURE HospitalManagementSystem.UpdateEquipmentStatus TO 'Technician_Role';
+
+-- -----------------------------------------------------
+-- Patient Views for Patient_Role
+-- -----------------------------------------------------
+-- Assumption: Patient usernames in MySQL will be 'p' + PatientID (e.g., 'p1', 'p123')
+-- If PatientID is stored directly as username, adjust SUBSTRING accordingly.
+
+CREATE OR REPLACE VIEW Patient_View_Self AS
+SELECT * FROM PATIENT
+WHERE PatientID = CAST(SUBSTRING(SUBSTRING_INDEX(USER(), '@', 1), 2) AS UNSIGNED);
+
+CREATE OR REPLACE VIEW MedicalHistory_View_Self AS
+SELECT mh.* FROM MEDICAL_HISTORY mh
+JOIN PATIENT p ON mh.PatientID = p.PatientID
+WHERE p.PatientID = CAST(SUBSTRING(SUBSTRING_INDEX(USER(), '@', 1), 2) AS UNSIGNED);
+
+CREATE OR REPLACE VIEW Allergies_View_Self AS
+SELECT a.* FROM ALLERGIES a
+JOIN PATIENT p ON a.PatientID = p.PatientID
+WHERE p.PatientID = CAST(SUBSTRING(SUBSTRING_INDEX(USER(), '@', 1), 2) AS UNSIGNED);
+
+CREATE OR REPLACE VIEW Insurance_View_Self AS
+SELECT i.* FROM INSURANCE i
+JOIN PATIENT p ON i.PatientID = p.PatientID
+WHERE p.PatientID = CAST(SUBSTRING(SUBSTRING_INDEX(USER(), '@', 1), 2) AS UNSIGNED);
+
+CREATE OR REPLACE VIEW Billing_View_Self AS
+SELECT b.* FROM BILLING b
+JOIN PATIENT p ON b.PatientID = p.PatientID
+WHERE p.PatientID = CAST(SUBSTRING(SUBSTRING_INDEX(USER(), '@', 1), 2) AS UNSIGNED);
+
+CREATE OR REPLACE VIEW Payment_View_Self AS
+SELECT py.* FROM PAYMENT py
+JOIN BILLING b ON py.BillingID = b.BillingID
+JOIN PATIENT p ON b.PatientID = p.PatientID
+WHERE p.PatientID = CAST(SUBSTRING(SUBSTRING_INDEX(USER(), '@', 1), 2) AS UNSIGNED);
+
+CREATE OR REPLACE VIEW AssignedDoctors_View_Self AS
+SELECT ad.DoctorID, e.Name as DoctorName, d.Specialty FROM ASSIGN_DOC ad
+JOIN DOCTOR d ON ad.DoctorID = d.EmployeeID
+JOIN EMPLOYEE e ON d.EmployeeID = e.EmployeeID
+WHERE ad.PatientID = CAST(SUBSTRING(SUBSTRING_INDEX(USER(), '@', 1), 2) AS UNSIGNED);
+
+CREATE OR REPLACE VIEW AssignedNurses_View_Self AS
+SELECT an.NurseID, e.Name as NurseName, n.Specialty FROM ASSIGN_NURSE an
+JOIN NURSE n ON an.NurseID = n.EmployeeID
+JOIN EMPLOYEE e ON n.EmployeeID = e.EmployeeID
+WHERE an.PatientID = CAST(SUBSTRING(SUBSTRING_INDEX(USER(), '@', 1), 2) AS UNSIGNED);
+
+CREATE OR REPLACE VIEW DiagnosticTests_View_Self AS
+SELECT dt.* FROM DIAGNOSTIC_TEST dt
+JOIN PERFORM_TEST pt ON dt.TestID = pt.TestID -- Assuming PERFORM_TEST links patient to test
+WHERE pt.PatientID = CAST(SUBSTRING(SUBSTRING_INDEX(USER(), '@', 1), 2) AS UNSIGNED);
+
+CREATE OR REPLACE VIEW Surgeries_View_Self AS
+SELECT s.* FROM SURGERY s
+JOIN PERFORM_SURGERY ps ON s.SurgeryID = ps.SurgeryID
+WHERE ps.PatientID = CAST(SUBSTRING(SUBSTRING_INDEX(USER(), '@', 1), 2) AS UNSIGNED);
+
+-- Grant Privileges to Patient_Role for their views
+GRANT SELECT ON HospitalManagementSystem.Patient_View_Self TO 'Patient_Role';
+GRANT SELECT ON HospitalManagementSystem.MedicalHistory_View_Self TO 'Patient_Role';
+GRANT SELECT ON HospitalManagementSystem.Allergies_View_Self TO 'Patient_Role';
+GRANT SELECT ON HospitalManagementSystem.Insurance_View_Self TO 'Patient_Role';
+GRANT SELECT ON HospitalManagementSystem.Billing_View_Self TO 'Patient_Role';
+GRANT SELECT ON HospitalManagementSystem.Payment_View_Self TO 'Patient_Role';
+GRANT SELECT ON HospitalManagementSystem.AssignedDoctors_View_Self TO 'Patient_Role';
+GRANT SELECT ON HospitalManagementSystem.AssignedNurses_View_Self TO 'Patient_Role';
+GRANT SELECT ON HospitalManagementSystem.DiagnosticTests_View_Self TO 'Patient_Role';
+GRANT SELECT ON HospitalManagementSystem.Surgeries_View_Self TO 'Patient_Role';
+
+FLUSH PRIVILEGES;
+
+-- -----------------------------------------------------
+-- Stored Procedures
+-- -----------------------------------------------------
+DELIMITER $$
+
+-- -----------------------------------------------------
+-- Patient Record Management
+-- -----------------------------------------------------
+CREATE PROCEDURE AddPatient (
+    IN p_FName VARCHAR(50),
+    IN p_LName VARCHAR(50),
+    IN p_Gender ENUM('Male', 'Female', 'Other'),
+    IN p_ContactInfo VARCHAR(100),
+    IN p_Address_Street VARCHAR(100),
+    IN p_Address_District VARCHAR(50),
+    IN p_Address_City VARCHAR(50),
+    IN p_DOB DATE,
+    IN p_CurrentMeds TEXT,
+    IN p_EmergencyContactPhone VARCHAR(20)
+)
+BEGIN
+    INSERT INTO PATIENT (FName, LName, Gender, ContactInfo, Address_Street, Address_District, Address_City, DOB, CurrentMeds, EmergencyContactPhone)
+    VALUES (p_FName, p_LName, p_Gender, p_ContactInfo, p_Address_Street, p_Address_District, p_Address_City, p_DOB, p_CurrentMeds, p_EmergencyContactPhone);
+    SELECT LAST_INSERT_ID() AS PatientID;
+END$$
+
+CREATE PROCEDURE UpdatePatientDemographics (
+    IN p_PatientID INT,
+    IN p_FName VARCHAR(50),
+    IN p_LName VARCHAR(50),
+    IN p_Gender ENUM('Male', 'Female', 'Other'),
+    IN p_DOB DATE,
+    IN p_Address_Street VARCHAR(100),
+    IN p_Address_District VARCHAR(50),
+    IN p_Address_City VARCHAR(50)
+)
+BEGIN
+    UPDATE PATIENT
+    SET FName = p_FName, LName = p_LName, Gender = p_Gender, DOB = p_DOB,
+        Address_Street = p_Address_Street, Address_District = p_Address_District, Address_City = p_Address_City
+    WHERE PatientID = p_PatientID;
+END$$
+
+CREATE PROCEDURE UpdatePatientContact (
+    IN p_PatientID INT,
+    IN p_ContactInfo VARCHAR(100),
+    IN p_EmergencyContactPhone VARCHAR(20)
+)
+BEGIN
+    UPDATE PATIENT
+    SET ContactInfo = p_ContactInfo, EmergencyContactPhone = p_EmergencyContactPhone
+    WHERE PatientID = p_PatientID;
+END$$
+
+CREATE PROCEDURE UpdatePatientMedications (
+    IN p_PatientID INT,
+    IN p_CurrentMeds TEXT
+)
+BEGIN
+    UPDATE PATIENT
+    SET CurrentMeds = p_CurrentMeds
+    WHERE PatientID = p_PatientID;
+END$$
+
+CREATE PROCEDURE DeletePatient (
+    IN p_PatientID INT
+)
+BEGIN
+    -- Consider implications: related records in ALLERGIES, MEDICAL_HISTORY, INSURANCE, BILLING etc.
+    -- For simplicity, this is a basic delete. Add cascading deletes or checks as needed.
+    DELETE FROM ALLERGIES WHERE PatientID = p_PatientID;
+    DELETE FROM MEDICAL_HISTORY WHERE PatientID = p_PatientID;
+    -- Add more deletions from related tables if direct FKs don't cascade or if soft delete is not used.
+    DELETE FROM PATIENT WHERE PatientID = p_PatientID;
+END$$
+
+-- -----------------------------------------------------
+-- Medical History, Allergies, Insurance Management
+-- -----------------------------------------------------
+CREATE PROCEDURE AddMedicalHistory (
+    IN p_PatientID INT,
+    IN p_Type VARCHAR(100),
+    IN p_Description TEXT,
+    IN p_Treatment TEXT,
+    IN p_Stage VARCHAR(50)
+)
+BEGIN
+    INSERT INTO MEDICAL_HISTORY (PatientID, Type, Description, Treatment, Stage)
+    VALUES (p_PatientID, p_Type, p_Description, p_Treatment, p_Stage);
+END$$
+
+CREATE PROCEDURE UpdateMedicalHistory (
+    IN p_PatientID INT,
+    IN p_Type VARCHAR(100),
+    IN p_Description TEXT,
+    IN p_Treatment TEXT,
+    IN p_Stage VARCHAR(50)
+)
+BEGIN
+    UPDATE MEDICAL_HISTORY
+    SET Description = p_Description, Treatment = p_Treatment, Stage = p_Stage
+    WHERE PatientID = p_PatientID AND Type = p_Type;
+END$$
+
+CREATE PROCEDURE AddAllergy (
+    IN p_PatientID INT,
+    IN p_Allergy VARCHAR(100)
+)
+BEGIN
+    INSERT INTO ALLERGIES (PatientID, Allergy)
+    VALUES (p_PatientID, p_Allergy);
+END$$
+
+CREATE PROCEDURE DeleteAllergy (
+    IN p_PatientID INT,
+    IN p_Allergy VARCHAR(100)
+)
+BEGIN
+    DELETE FROM ALLERGIES WHERE PatientID = p_PatientID AND Allergy = p_Allergy;
+END$$
+
+CREATE PROCEDURE AddInsurance (
+    IN p_PatientID INT,
+    IN p_PolicyNumber VARCHAR(50),
+    IN p_Priority INT,
+    IN p_Provider VARCHAR(100),
+    IN p_Status ENUM('Active', 'Pending', 'Expired', 'Cancelled'),
+    IN p_CoveragePercentage DECIMAL(5, 2),
+    IN p_CoverageLimit DECIMAL(12, 2)
+)
+BEGIN
+    INSERT INTO INSURANCE (PatientID, PolicyNumber, Priority, Provider, Status, CoveragePercentage, CoverageLimit)
+    VALUES (p_PatientID, p_PolicyNumber, p_Priority, p_Provider, p_Status, p_CoveragePercentage, p_CoverageLimit);
+    SELECT LAST_INSERT_ID() AS InsuranceID;
+END$$
+
+CREATE PROCEDURE UpdateInsurance (
+    IN p_InsuranceID INT,
+    IN p_PolicyNumber VARCHAR(50),
+    IN p_Priority INT,
+    IN p_Provider VARCHAR(100),
+    IN p_Status ENUM('Active', 'Pending', 'Expired', 'Cancelled'),
+    IN p_CoveragePercentage DECIMAL(5, 2),
+    IN p_CoverageLimit DECIMAL(12, 2)
+)
+BEGIN
+    UPDATE INSURANCE
+    SET PolicyNumber = p_PolicyNumber, Priority = p_Priority, Provider = p_Provider, Status = p_Status,
+        CoveragePercentage = p_CoveragePercentage, CoverageLimit = p_CoverageLimit
+    WHERE InsuranceID = p_InsuranceID;
+END$$
+
+CREATE PROCEDURE DeleteInsurance (
+    IN p_InsuranceID INT
+)
+BEGIN
+    DELETE FROM COVER WHERE InsuranceID = p_InsuranceID; -- Remove links to bills first
+    DELETE FROM INSURANCE WHERE InsuranceID = p_InsuranceID;
+END$$
+
+-- -----------------------------------------------------
+-- Admin: Staff Management (Doctor, Nurse, Technician)
+-- -----------------------------------------------------
+CREATE PROCEDURE AddEmployeeBase (
+    IN p_EmployeeID VARCHAR(20),
+    IN p_Name VARCHAR(100),
+    IN p_Gender ENUM('Male', 'Female', 'Other'),
+    IN p_DOB DATE,
+    IN p_JobType VARCHAR(50),
+    IN p_Experience INT,
+    IN p_Salary DECIMAL(10, 2),
+    IN p_ContactDetails VARCHAR(100),
+    IN p_StartDate DATE,
+    IN p_DepartmentID INT
+)
+BEGIN
+    INSERT INTO EMPLOYEE (EmployeeID, Name, Gender, DOB, JobType, Experience, Salary, ContactDetails, StartDate, DepartmentID)
+    VALUES (p_EmployeeID, p_Name, p_Gender, p_DOB, p_JobType, p_Experience, p_Salary, p_ContactDetails, p_StartDate, p_DepartmentID);
+END$$
+
+CREATE PROCEDURE UpdateEmployeeBase (
+    IN p_EmployeeID VARCHAR(20),
+    IN p_Name VARCHAR(100),
+    IN p_Gender ENUM('Male', 'Female', 'Other'),
+    IN p_DOB DATE,
+    IN p_Experience INT,
+    IN p_Salary DECIMAL(10, 2),
+    IN p_ContactDetails VARCHAR(100),
+    IN p_StartDate DATE,
+    IN p_DepartmentID INT
+)
+BEGIN
+    UPDATE EMPLOYEE
+    SET Name = p_Name, Gender = p_Gender, DOB = p_DOB, Experience = p_Experience, Salary = p_Salary,
+        ContactDetails = p_ContactDetails, StartDate = p_StartDate, DepartmentID = p_DepartmentID
+    WHERE EmployeeID = p_EmployeeID;
+END$$
+
+CREATE PROCEDURE AddDoctor (
+    IN p_EmployeeID VARCHAR(20), IN p_Name VARCHAR(100), IN p_Gender ENUM('Male', 'Female', 'Other'), IN p_DOB DATE,
+    IN p_Experience INT, IN p_Salary DECIMAL(10, 2), IN p_ContactDetails VARCHAR(100), IN p_StartDate DATE, IN p_DepartmentID INT,
+    IN p_Specialty VARCHAR(100), IN p_Certificate VARCHAR(255)
+)
+BEGIN
+    CALL AddEmployeeBase(p_EmployeeID, p_Name, p_Gender, p_DOB, 'Doctor', p_Experience, p_Salary, p_ContactDetails, p_StartDate, p_DepartmentID);
+    INSERT INTO DOCTOR (EmployeeID, Specialty, Certificate) VALUES (p_EmployeeID, p_Specialty, p_Certificate);
+END$$
+
+CREATE PROCEDURE UpdateDoctor (
+    IN p_EmployeeID VARCHAR(20), IN p_Name VARCHAR(100), IN p_Gender ENUM('Male', 'Female', 'Other'), IN p_DOB DATE,
+    IN p_Experience INT, IN p_Salary DECIMAL(10, 2), IN p_ContactDetails VARCHAR(100), IN p_StartDate DATE, IN p_DepartmentID INT,
+    IN p_Specialty VARCHAR(100), IN p_Certificate VARCHAR(255)
+)
+BEGIN
+    CALL UpdateEmployeeBase(p_EmployeeID, p_Name, p_Gender, p_DOB, p_Experience, p_Salary, p_ContactDetails, p_StartDate, p_DepartmentID);
+    UPDATE DOCTOR SET Specialty = p_Specialty, Certificate = p_Certificate WHERE EmployeeID = p_EmployeeID;
+END$$
+
+CREATE PROCEDURE DeleteDoctor (IN p_EmployeeID VARCHAR(20))
+BEGIN
+    DELETE FROM ASSIGN_DOC WHERE DoctorID = p_EmployeeID;
+    DELETE FROM PERFORM_SURGERY WHERE DoctorID = p_EmployeeID;
+    DELETE FROM DOCTOR WHERE EmployeeID = p_EmployeeID;
+    DELETE FROM EMPLOYEE WHERE EmployeeID = p_EmployeeID;
+END$$
+
+CREATE PROCEDURE AddNurse (
+    IN p_EmployeeID VARCHAR(20), IN p_Name VARCHAR(100), IN p_Gender ENUM('Male', 'Female', 'Other'), IN p_DOB DATE,
+    IN p_Experience INT, IN p_Salary DECIMAL(10, 2), IN p_ContactDetails VARCHAR(100), IN p_StartDate DATE, IN p_DepartmentID INT,
+    IN p_Specialty VARCHAR(100)
+)
+BEGIN
+    CALL AddEmployeeBase(p_EmployeeID, p_Name, p_Gender, p_DOB, 'Nurse', p_Experience, p_Salary, p_ContactDetails, p_StartDate, p_DepartmentID);
+    INSERT INTO NURSE (EmployeeID, Specialty) VALUES (p_EmployeeID, p_Specialty);
+END$$
+
+CREATE PROCEDURE UpdateNurse (
+    IN p_EmployeeID VARCHAR(20), IN p_Name VARCHAR(100), IN p_Gender ENUM('Male', 'Female', 'Other'), IN p_DOB DATE,
+    IN p_Experience INT, IN p_Salary DECIMAL(10, 2), IN p_ContactDetails VARCHAR(100), IN p_StartDate DATE, IN p_DepartmentID INT,
+    IN p_Specialty VARCHAR(100)
+)
+BEGIN
+    CALL UpdateEmployeeBase(p_EmployeeID, p_Name, p_Gender, p_DOB, p_Experience, p_Salary, p_ContactDetails, p_StartDate, p_DepartmentID);
+    UPDATE NURSE SET Specialty = p_Specialty WHERE EmployeeID = p_EmployeeID;
+END$$
+
+CREATE PROCEDURE DeleteNurse (IN p_EmployeeID VARCHAR(20))
+BEGIN
+    DELETE FROM ASSIGN_NURSE WHERE NurseID = p_EmployeeID;
+    DELETE FROM PERFORM_TEST WHERE NurseID = p_EmployeeID;
+    DELETE FROM NURSE WHERE EmployeeID = p_EmployeeID;
+    DELETE FROM EMPLOYEE WHERE EmployeeID = p_EmployeeID;
+END$$
+
+CREATE PROCEDURE AddTechnician (
+    IN p_EmployeeID VARCHAR(20), IN p_Name VARCHAR(100), IN p_Gender ENUM('Male', 'Female', 'Other'), IN p_DOB DATE,
+    IN p_Experience INT, IN p_Salary DECIMAL(10, 2), IN p_ContactDetails VARCHAR(100), IN p_StartDate DATE, IN p_DepartmentID INT,
+    IN p_Specialty VARCHAR(100)
+)
+BEGIN
+    CALL AddEmployeeBase(p_EmployeeID, p_Name, p_Gender, p_DOB, 'Technician', p_Experience, p_Salary, p_ContactDetails, p_StartDate, p_DepartmentID);
+    INSERT INTO TECHNICIAN (EmployeeID, Specialty) VALUES (p_EmployeeID, p_Specialty);
+END$$
+
+CREATE PROCEDURE UpdateTechnician (
+    IN p_EmployeeID VARCHAR(20), IN p_Name VARCHAR(100), IN p_Gender ENUM('Male', 'Female', 'Other'), IN p_DOB DATE,
+    IN p_Experience INT, IN p_Salary DECIMAL(10, 2), IN p_ContactDetails VARCHAR(100), IN p_StartDate DATE, IN p_DepartmentID INT,
+    IN p_Specialty VARCHAR(100)
+)
+BEGIN
+    CALL UpdateEmployeeBase(p_EmployeeID, p_Name, p_Gender, p_DOB, p_Experience, p_Salary, p_ContactDetails, p_StartDate, p_DepartmentID);
+    UPDATE TECHNICIAN SET Specialty = p_Specialty WHERE EmployeeID = p_EmployeeID;
+END$$
+
+CREATE PROCEDURE DeleteTechnician (IN p_EmployeeID VARCHAR(20))
+BEGIN
+    DELETE FROM MAINTAINS WHERE TechID = p_EmployeeID;
+    DELETE FROM TECHNICIAN WHERE EmployeeID = p_EmployeeID;
+    DELETE FROM EMPLOYEE WHERE EmployeeID = p_EmployeeID;
+END$$
+
+-- -----------------------------------------------------
+-- Assign Doctors/Nurses to Patients
+-- -----------------------------------------------------
+CREATE PROCEDURE AssignDoctorToPatient (IN p_DoctorID VARCHAR(20), IN p_PatientID INT)
+BEGIN
+    INSERT INTO ASSIGN_DOC (DoctorID, PatientID) VALUES (p_DoctorID, p_PatientID);
+END$$
+
+CREATE PROCEDURE RemoveDoctorFromPatient (IN p_DoctorID VARCHAR(20), IN p_PatientID INT)
+BEGIN
+    DELETE FROM ASSIGN_DOC WHERE DoctorID = p_DoctorID AND PatientID = p_PatientID;
+END$$
+
+CREATE PROCEDURE AssignNurseToPatient (IN p_NurseID VARCHAR(20), IN p_PatientID INT)
+BEGIN
+    INSERT INTO ASSIGN_NURSE (NurseID, PatientID) VALUES (p_NurseID, p_PatientID);
+END$$
+
+CREATE PROCEDURE RemoveNurseFromPatient (IN p_NurseID VARCHAR(20), IN p_PatientID INT)
+BEGIN
+    DELETE FROM ASSIGN_NURSE WHERE NurseID = p_NurseID AND PatientID = p_PatientID;
+END$$
+
+-- -----------------------------------------------------
+-- Billing and Insurance
+-- -----------------------------------------------------
+CREATE PROCEDURE GenerateBill (
+    IN p_PatientID INT,
+    IN p_InitialAmount DECIMAL(12, 2),
+    IN p_DateIssued DATE,
+    IN p_DueDate DATE
+)
+BEGIN
+    INSERT INTO BILLING (PatientID, DateIssued, InitialAmount, CoverAmount, FinalAmount, DueDate, Status)
+    VALUES (p_PatientID, p_DateIssued, p_InitialAmount, 0.00, p_InitialAmount, p_DueDate, 'Pending');
+    SELECT LAST_INSERT_ID() AS BillingID;
+END$$
+
+CREATE PROCEDURE RecalculateBillCoverage (IN p_BillingID INT)
+BEGIN
+    DECLARE v_InitialAmount DECIMAL(12,2);
+    DECLARE v_TotalCover DECIMAL(12,2) DEFAULT 0.00;
+
+    SELECT InitialAmount INTO v_InitialAmount
+    FROM BILLING
+    WHERE BillingID = p_BillingID;
+
+    SELECT COALESCE(SUM(
+                LEAST(
+                    (v_InitialAmount * I.CoveragePercentage) / 100.0,
+                    I.CoverageLimit
+                )
+            ), 0.00)
+    INTO v_TotalCover
+    FROM INSURANCE I
+    JOIN COVER C ON I.InsuranceID = C.InsuranceID
+    WHERE C.BillingID = p_BillingID AND I.Status = 'Active';
+
+    IF v_TotalCover > v_InitialAmount THEN
+        SET v_TotalCover = v_InitialAmount;
+    END IF;
+
+    UPDATE BILLING
+    SET CoverAmount = v_TotalCover,
+        FinalAmount = v_InitialAmount - v_TotalCover
+    WHERE BillingID = p_BillingID;
+END$$
+
+CREATE PROCEDURE LinkInsuranceToBillAndRecalculate (IN p_BillingID INT, IN p_InsuranceID INT)
+BEGIN
+    -- Check if patient associated with bill has this insurance
+    DECLARE v_PatientID_Bill INT;
+    DECLARE v_PatientID_Insurance INT;
+    DECLARE v_InsuranceActive BOOLEAN;
+
+    SELECT PatientID INTO v_PatientID_Bill FROM BILLING WHERE BillingID = p_BillingID;
+    SELECT PatientID, (Status = 'Active') INTO v_PatientID_Insurance, v_InsuranceActive FROM INSURANCE WHERE InsuranceID = p_InsuranceID;
+
+    IF v_PatientID_Bill IS NOT NULL AND v_PatientID_Insurance IS NOT NULL AND v_PatientID_Bill = v_PatientID_Insurance AND v_InsuranceActive THEN
+        INSERT IGNORE INTO COVER (BillingID, InsuranceID) VALUES (p_BillingID, p_InsuranceID);
+        CALL RecalculateBillCoverage(p_BillingID);
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Insurance policy cannot be linked or is not active for this patient''s bill.';
+    END IF;
+END$$
+
+
+-- -----------------------------------------------------
+-- Diagnostic Tests Management
+-- -----------------------------------------------------
+CREATE PROCEDURE OrderDiagnosticTest (
+    IN p_PatientID INT,
+    IN p_NurseID_Performer VARCHAR(20), -- Nurse who will perform/is associated
+    IN p_TestName VARCHAR(100),
+    IN p_TestDescription TEXT,
+    IN p_TestDate DATETIME
+)
+BEGIN
+    DECLARE v_TestID INT;
+    INSERT INTO DIAGNOSTIC_TEST (Name, Description, Date, Results)
+    VALUES (p_TestName, p_TestDescription, p_TestDate, NULL);
+    SET v_TestID = LAST_INSERT_ID();
+
+    IF p_NurseID_Performer IS NOT NULL THEN
+        INSERT INTO PERFORM_TEST (TestID, NurseID, PatientID)
+        VALUES (v_TestID, p_NurseID_Performer, p_PatientID);
+    END IF;
+    SELECT v_TestID AS TestID;
+END$$
+
+CREATE PROCEDURE RecordTestResults (
+    IN p_TestID INT,
+    IN p_Results TEXT
+)
+BEGIN
+    UPDATE DIAGNOSTIC_TEST
+    SET Results = p_Results
+    WHERE TestID = p_TestID;
+END$$
+
+CREATE PROCEDURE AssignEquipmentToTest (IN p_TestID INT, IN p_EquipID INT)
+BEGIN
+    INSERT INTO USE_IN_TEST (TestID, EquipID) VALUES (p_TestID, p_EquipID);
+END$$
+
+-- -----------------------------------------------------
+-- Surgery Management
+-- -----------------------------------------------------
+CREATE PROCEDURE ScheduleSurgery (
+    IN p_PatientID INT,
+    IN p_DoctorID VARCHAR(20),
+    IN p_SurgeryType VARCHAR(100),
+    IN p_SurgeryDate DATETIME
+)
+BEGIN
+    DECLARE v_SurgeryID INT;
+    INSERT INTO SURGERY (Type, Date, Outcome, Complications)
+    VALUES (p_SurgeryType, p_SurgeryDate, NULL, NULL);
+    SET v_SurgeryID = LAST_INSERT_ID();
+
+    INSERT INTO PERFORM_SURGERY (SurgeryID, DoctorID, PatientID)
+    VALUES (v_SurgeryID, p_DoctorID, p_PatientID);
+    SELECT v_SurgeryID AS SurgeryID;
+END$$
+
+CREATE PROCEDURE UpdateSurgeryOutcome (
+    IN p_SurgeryID INT,
+    IN p_Outcome VARCHAR(100),
+    IN p_Complications TEXT
+)
+BEGIN
+    UPDATE SURGERY
+    SET Outcome = p_Outcome, Complications = p_Complications
+    WHERE SurgeryID = p_SurgeryID;
+END$$
+
+CREATE PROCEDURE AssignEquipmentToSurgery (IN p_SurgeryID INT, IN p_EquipID INT)
+BEGIN
+    INSERT INTO USE_IN_SURGERY (SurgeryID, EquipID) VALUES (p_SurgeryID, p_EquipID);
+END$$
+
+-- -----------------------------------------------------
+-- Equipment Maintenance (Technician)
+-- -----------------------------------------------------
+CREATE PROCEDURE LogEquipmentMaintenance (
+    IN p_TechID VARCHAR(20),
+    IN p_EquipmentID INT,
+    IN p_MaintenanceType VARCHAR(100),
+    IN p_MaintenanceDate DATE
+)
+BEGIN
+    INSERT INTO MAINTAINS (TechID, EquipmentID, MaintenanceType, MaintenanceDate)
+    VALUES (p_TechID, p_EquipmentID, p_MaintenanceType, p_MaintenanceDate);
+    -- Optionally update equipment status here, e.g., to 'Maintenance' or 'Available'
+END$$
+
+CREATE PROCEDURE UpdateEquipmentStatus (
+    IN p_EquipmentID INT,
+    IN p_NewStatus ENUM('Available', 'In Use', 'Maintenance', 'Decommissioned')
+)
+BEGIN
+    UPDATE EQUIPMENT
+    SET Status = p_NewStatus
+    WHERE EquipmentID = p_EquipmentID;
+END$$
+
+DELIMITER ;
